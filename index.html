@@ -28,21 +28,39 @@
     .puzzle-cut { clip-path:polygon(0 0,88% 0,88% 12%,100% 12%,100% 88%,88% 88%,88% 100%,0 100%); }
     .lift { transition:transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
     .lift:hover { transform:translateY(-5px); box-shadow:0 18px 36px rgba(15,38,28,.12); border-color:rgba(229,168,59,.7); }
+    .brand-mark { transition:filter .3s ease, transform .3s ease; }
+    .brand-mark:hover { filter:drop-shadow(0 0 10px rgba(229,168,59,.65)); transform:rotate(-3deg) scale(1.04); }
     .reveal { animation:rise .7s both; }
+    .scroll-reveal { opacity:0; transform:translateY(24px); transition:opacity .65s ease, transform .65s ease; }
+    .scroll-reveal.visible { opacity:1; transform:translateY(0); }
     .delay-1 { animation-delay:.12s; } .delay-2 { animation-delay:.24s; } .delay-3 { animation-delay:.36s; }
     @keyframes rise { from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:translateY(0)} }
     @keyframes pulse-dot { 0%,100%{box-shadow:0 0 0 0 rgba(77,124,93,.35)} 50%{box-shadow:0 0 0 8px rgba(77,124,93,0)} }
+    @keyframes shimmer { from{transform:translateX(-140%)} to{transform:translateX(220%)} }
+    .shimmer-cta { position:relative; overflow:hidden; }
+    .shimmer-cta:after { content:''; position:absolute; inset:0 auto 0 0; width:35%; transform:translateX(-140%) skewX(-18deg); background:rgba(255,255,255,.32); animation:shimmer 3.2s ease-in-out infinite; }
+    .headline-piece { position:relative; display:inline-block; }
+    .headline-piece:after { content:''; position:absolute; right:0; bottom:-8px; left:0; height:7px; border-radius:999px; background:var(--gold); transform-origin:right; animation:underline-sweep 1s .6s both; }
+    h1 > span { position:relative; display:inline-block; text-decoration-thickness:8px; text-decoration-color:var(--gold); text-underline-offset:8px; }
+    h1 > span:after { content:''; position:absolute; right:0; bottom:-8px; left:0; height:6px; border-radius:999px; background:var(--gold); transform-origin:right; animation:underline-sweep 1s .6s both; }
+    @keyframes underline-sweep { from{transform:scaleX(0); opacity:0} to{transform:scaleX(1); opacity:1} }
     .pulse-dot { animation:pulse-dot 2s infinite; }
     .modal-open { overflow:hidden; }
     .modal { opacity:0; visibility:hidden; transition:.25s ease; }
     .modal.active { opacity:1; visibility:visible; }
-    .modal-panel { transform:translateY(16px); transition:.25s ease; }
-    .modal.active .modal-panel { transform:translateY(0); }
+    .modal-panel { opacity:0; transform:scale(.95) translateY(12px); transition:opacity .28s ease, transform .28s cubic-bezier(.2,.8,.2,1); }
+    .modal.active .modal-panel { opacity:1; transform:scale(1) translateY(0); }
     .mobile-drawer { transform:translateX(110%); transition:transform .28s ease; }
     .mobile-drawer.open { transform:translateX(0); }
     .toast { transform:translateY(120%); transition:transform .35s ease; }
     .toast.show { transform:translateY(0); }
     .filter-active { background:var(--forest); color:#fff; }
+    #jobs { transition:opacity .18s ease, transform .18s ease; }
+    #jobs.filtering { opacity:.25; transform:translateY(6px); }
+    .nav-link { position:relative; padding-bottom:6px; }
+    .nav-link:after { content:''; position:absolute; right:0; bottom:0; left:0; height:2px; border-radius:999px; background:var(--gold); transform:scaleX(0); transform-origin:right; transition:transform .25s ease; }
+    .nav-link.active:after { transform:scaleX(1); }
+    @media (prefers-reduced-motion:reduce) { *, *:before, *:after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; transition-duration:.01ms !important; } }
     @media (max-width:767px) { .hero-grid { background-size:28px 28px; } }
   </style>
 </head>
@@ -51,13 +69,13 @@
     <header class="relative z-40 border-b border-[var(--line)] bg-[rgba(248,246,240,.86)] backdrop-blur-xl">
       <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
         <a href="#top" class="flex items-center gap-3" aria-label="العودة إلى الرئيسية">
-          <svg width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 5h17v12h7V5h8v17H28v8h12v13H23V31H8V5Z" fill="#1B4332"/><path d="M28 22h12v8H28v-8Z" fill="#E5A83B"/><path d="M12 11h8v8h-8z" fill="#E5A83B" opacity=".9"/></svg>
+          <svg class="brand-mark" width="42" height="42" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M8 5h17v12h7V5h8v17H28v8h12v13H23V31H8V5Z" fill="#1B4332"/><path d="M28 22h12v8H28v-8Z" fill="#E5A83B"/><path d="M12 11h8v8h-8z" fill="#E5A83B" opacity=".9"/></svg>
           <span class="leading-none"><strong class="block text-lg font-black tracking-tight">The Missing Piece</strong><small class="mt-1 block text-[10px] font-bold uppercase tracking-[.18em] text-[var(--sage)]">Powered by Empower Hub</small></span>
         </a>
         <nav class="hidden items-center gap-7 text-sm font-bold lg:flex">
-          <a class="transition-colors hover:text-[var(--gold)]" href="#about">عن المبادرة</a><a class="transition-colors hover:text-[var(--gold)]" href="#surface">الرؤية العميقة</a><a class="transition-colors hover:text-[var(--gold)]" href="#opportunities">معرض الفرص</a><a class="transition-colors hover:text-[var(--gold)]" href="#how">آلية العمل</a><a class="transition-colors hover:text-[var(--gold)]" href="#join">انضم إلينا</a>
+          <a class="nav-link transition-colors hover:text-[var(--gold)]" href="#about">عن المبادرة</a><a class="nav-link transition-colors hover:text-[var(--gold)]" href="#surface">الرؤية العميقة</a><a class="nav-link transition-colors hover:text-[var(--gold)]" href="#opportunities">معرض الفرص</a><a class="nav-link transition-colors hover:text-[var(--gold)]" href="#how">آلية العمل</a><a class="nav-link transition-colors hover:text-[var(--gold)]" href="#join">انضم إلينا</a>
         </nav>
-        <div class="hidden items-center gap-4 sm:flex"><span class="flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/60 px-3 py-2 text-xs font-bold"><i class="pulse-dot h-2 w-2 rounded-full bg-[var(--sage)]"></i> متصل الآن: +45 شركة بالشرقية</span><a href="#join" class="rounded-full bg-[var(--gold)] px-5 py-3 text-sm font-extrabold text-[var(--slate)] shadow-[0_8px_0_#b67d1d] transition hover:-translate-y-0.5 hover:shadow-[0_10px_0_#b67d1d]">ابدأ قصتك</a></div>
+        <div class="hidden items-center gap-4 sm:flex"><span class="flex items-center gap-2 rounded-full border border-[var(--line)] bg-white/60 px-3 py-2 text-xs font-bold"><i class="pulse-dot h-2 w-2 rounded-full bg-[var(--sage)]"></i> متصل الآن: +45 شركة بالشرقية</span><a href="#join" class="shimmer-cta rounded-full bg-[var(--gold)] px-5 py-3 text-sm font-extrabold text-[var(--slate)] shadow-[0_8px_0_#b67d1d] transition hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-[0_10px_0_#b67d1d] active:scale-[.98]">ابدأ قصتك</a></div>
         <button id="menuBtn" class="rounded-xl border border-[var(--line)] p-2 lg:hidden" aria-label="فتح القائمة"><span class="block h-0.5 w-6 bg-[var(--forest)]"></span><span class="my-1.5 block h-0.5 w-4 bg-[var(--forest)]"></span><span class="block h-0.5 w-6 bg-[var(--forest)]"></span></button>
       </div>
     </header>
@@ -101,12 +119,14 @@
     ];
     const jobsEl=document.getElementById('jobs'), search=document.getElementById('search'), count=document.getElementById('resultCount'); let activeFilter='الكل';
     function renderJobs(){ const term=search.value.trim().toLowerCase(); const filtered=jobs.filter(j=>(activeFilter==='الكل'||j.location===activeFilter||j.type===activeFilter)&&[j.title,j.company,j.location,j.type,...j.skills].join(' ').toLowerCase().includes(term)); count.textContent=`نعرض ${filtered.length} ${filtered.length===1?'فرصة':'فرص'} محلية`; jobsEl.innerHTML=filtered.length?filtered.map((j,i)=>`<article class="lift flex flex-col justify-between rounded-[1.4rem] border border-[var(--line)] bg-white p-6" data-index="${jobs.indexOf(j)}"><div><div class="flex items-start justify-between gap-4"><span class="rounded-full bg-[var(--sage)]/10 px-3 py-1 text-[10px] font-black text-[var(--sage)]">${j.type}</span><span class="text-xs font-bold text-[var(--sage)]">${j.location}</span></div><h3 class="mt-6 text-xl font-black">${j.title}</h3><p class="mt-1 text-sm font-bold text-[var(--sage)]">${j.company}</p><div class="mt-5 flex flex-wrap gap-2">${j.skills.map(s=>`<span class="rounded-md bg-[var(--cream)] px-2 py-1 text-[10px] font-bold">${s}</span>`).join('')}</div></div><button class="job-open mt-7 flex items-center justify-between border-t border-[var(--line)] pt-4 text-sm font-black" data-index="${jobs.indexOf(j)}">التفاصيل والتقديم <span class="text-xl text-[var(--gold)]">←</span></button></article>`).join(''):'<div class="rounded-2xl border border-dashed border-[var(--sage)] p-10 text-center font-bold text-[var(--sage)] md:col-span-3">لم نجد فرصة بهذه الكلمات. جرّب بحثًا أوسع.</div>'; }
-    renderJobs(); search.addEventListener('input',renderJobs); document.getElementById('filters').addEventListener('click',e=>{if(!e.target.dataset.filter)return;activeFilter=e.target.dataset.filter;document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('filter-active',b===e.target));renderJobs();});
+    renderJobs(); search.addEventListener('input',()=>{jobsEl.classList.add('filtering');renderJobs();requestAnimationFrame(()=>jobsEl.classList.remove('filtering'))}); document.getElementById('filters').addEventListener('click',e=>{if(!e.target.dataset.filter)return;activeFilter=e.target.dataset.filter;document.querySelectorAll('[data-filter]').forEach(b=>b.classList.toggle('filter-active',b===e.target));jobsEl.classList.add('filtering');renderJobs();requestAnimationFrame(()=>jobsEl.classList.remove('filtering'));});
     const modal=document.getElementById('jobModal'); function openJob(job){document.getElementById('modalType').textContent=job.type;document.getElementById('modalTitle').textContent=job.title;document.getElementById('modalCompany').textContent=job.company;document.getElementById('modalLocation').textContent=`⌖ ${job.location}`;document.getElementById('modalDuration').textContent=`◷ ${job.duration}`;document.getElementById('modalSeats').textContent=`+ ${job.seats}`;document.getElementById('modalDescription').textContent=job.description;document.getElementById('modalRequirements').textContent=job.requirements;document.getElementById('applyMessage').classList.add('hidden');document.getElementById('applyBtn').classList.remove('hidden');modal.classList.add('active');document.body.classList.add('modal-open');} jobsEl.addEventListener('click',e=>{const btn=e.target.closest('.job-open');if(btn)openJob(jobs[btn.dataset.index]);}); document.getElementById('closeModal').onclick=()=>{modal.classList.remove('active');document.body.classList.remove('modal-open')}; modal.addEventListener('click',e=>{if(e.target===modal)document.getElementById('closeModal').click()}); document.getElementById('applyBtn').onclick=()=>{document.getElementById('applyBtn').classList.add('hidden');document.getElementById('applyMessage').classList.remove('hidden')};
     const steps={students:[['01','أنشئ مساحتك','أخبرنا بما تتعلمه، وما الذي تريد تجربته في الشرقية.'],['02','اكتشف ما يناسبك','نقترح فرصًا محلية حسب مهاراتك ووقتك ومكانك.'],['03','ابدأ بقطعة حقيقية','قدّم، تعلّم، وابنِ دليلًا جديدًا على قدرتك.']],companies:[['01','صف احتياجك','حوّل الدور الذي تحتاجه إلى فرصة تعلم واضحة.'],['02','قابل طاقة جديدة','تصفح ملفات مهارات صُنعت من مشاريع حقيقية.'],['03','اصنع أثرًا محليًا','درّب موهبة قريبة، وابنِ فريق الغد من هنا.']]}; function renderSteps(kind='students'){document.getElementById('steps').innerHTML=steps[kind].map(s=>`<div class="relative border-t border-white/20 pt-6"><span class="text-sm font-black text-[var(--gold)]">${s[0]}</span><h3 class="mt-7 text-2xl font-black">${s[1]}</h3><p class="mt-3 leading-8 text-white/60">${s[2]}</p></div>`).join('');} renderSteps(); document.querySelectorAll('.tab-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.tab-btn').forEach(b=>{b.classList.remove('bg-[var(--gold)]','text-[var(--slate)]');b.classList.add('text-white/70')});btn.classList.add('bg-[var(--gold)]','text-[var(--slate)]');btn.classList.remove('text-white/70');renderSteps(btn.dataset.tab)});
     document.querySelectorAll('.role-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.role-btn').forEach(b=>{b.classList.remove('bg-[var(--forest)]','text-white');b.classList.add('text-[var(--forest)]')});btn.classList.add('bg-[var(--forest)]','text-white');btn.classList.remove('text-[var(--forest)]');document.getElementById('role').value=btn.dataset.role;document.getElementById('contextLabel').firstChild.textContent=btn.dataset.role==='company'?'اسم الشركة':'الجامعة / التخصص';document.querySelector('[name="context"]').placeholder=btn.dataset.role==='company'?'مثال: شركة دلتا للحلول':'جامعة الزقازيق - نظم ومعلومات'});
     const toast=document.getElementById('toast');document.getElementById('leadForm').onsubmit=e=>{e.preventDefault();toast.classList.add('show');e.target.reset();setTimeout(()=>toast.classList.remove('show'),4500)};
     const drawer=document.getElementById('drawer'),backdrop=document.getElementById('backdrop');function toggleMenu(open){drawer.classList.toggle('open',open);backdrop.classList.toggle('invisible',!open);backdrop.classList.toggle('opacity-0',!open);document.body.classList.toggle('modal-open',open)}document.getElementById('menuBtn').onclick=()=>toggleMenu(true);document.getElementById('closeMenu').onclick=()=>toggleMenu(false);backdrop.onclick=()=>toggleMenu(false);drawer.querySelectorAll('a').forEach(a=>a.onclick=()=>toggleMenu(false));document.querySelectorAll('[data-partner]').forEach(b=>b.onclick=()=>document.getElementById('join').scrollIntoView({behavior:'smooth'}));
+    const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target)}}),{threshold:.12}); document.querySelectorAll('main section:not(#about), main section .lift').forEach(element=>{element.classList.add('scroll-reveal');revealObserver.observe(element)});
+    const navLinks=[...document.querySelectorAll('.nav-link')], navSections=navLinks.map(link=>document.querySelector(link.getAttribute('href'))).filter(Boolean); const navObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(link=>link.classList.toggle('active',link.getAttribute('href')===`#${entry.target.id}`))}}),{rootMargin:'-35% 0px -55%'}); navSections.forEach(section=>navObserver.observe(section)); navLinks[0]?.classList.add('active');
   </script>
 </body>
 </html>
