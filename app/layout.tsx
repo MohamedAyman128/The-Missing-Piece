@@ -1,0 +1,11 @@
+import type { Metadata } from "next"
+import "./globals.css"
+
+export const metadata: Metadata = {
+  title: "The Missing Piece | Empower Hub",
+  description: "منصة تربط شباب الشرقية بفرص محلية حقيقية.",
+}
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  return <html lang="ar" dir="rtl"><body>{children}</body></html>
+}
